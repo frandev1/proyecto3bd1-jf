@@ -1,4 +1,3 @@
-CREATE DATABASE servicioTelefonico
 
 USE [servicioTelefonico]
 GO
