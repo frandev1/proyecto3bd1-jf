@@ -56,7 +56,11 @@ GO
 
 
 
-/****** Object:  Table [dbo].[ElementoDeTipoTarifa]    Script Date: 22/5/2024 15:12:38 ******/
+USE [servicioTelefonico]
+GO
+
+
+/****** Object:  Table [dbo].[ElementoDeTipoTarifa]    Script Date: 2/6/2024 02:52:31 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -96,6 +100,7 @@ GO
 
 ALTER TABLE [dbo].[ElementoDeTipoTarifa] CHECK CONSTRAINT [FK_ElementoDeTipoTarifa_TipoUnidad]
 GO
+
 
 
 
@@ -166,8 +171,6 @@ CREATE TABLE [dbo].[TipoRelacionFamiliar](
 ) ON [PRIMARY]
 GO
 
-
-
 /****** Object:  Table [dbo].[TiposElemento]    Script Date: 22/5/2024 15:13:39 ******/
 SET ANSI_NULLS ON
 GO
@@ -178,6 +181,9 @@ GO
 CREATE TABLE [dbo].[TiposElemento](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[Nombre] [nvarchar](128) NOT NULL,
+	[IdTipoUnidad] [int] NOT NULL,
+	[Valor] [int] NOT NULL,
+	[EsFijo] [int] NOT NULL
  CONSTRAINT [PK_TiposElemento] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
