@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -7,7 +7,6 @@ import cuentaLogo from './assets/klipartz.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
@@ -16,14 +15,12 @@ function App() {
         <div className="group-content">
           <div className="card-container">
             <div className="card-body">
-              <img src={facturaLogo} alt="Factura" width="100" height="100" />
-              <p className="card-text"></p>
-              <button className="btn" onClick={() => {} }>Ver facturas</button>
+              <img src={facturaLogo} alt="Factura" width="100" height="100" onClick={() => { }}/>
+              <p className="card-text">Ver Facturas</p>
             </div>
             <div className="card-body">
-              <img src={cuentaLogo} alt="Factura" width="100" height="100" />
-              <p className="card-text"></p>
-              <button className="btn" onClick={() => {} }>Ver Estado de Cuenta</button>
+              <img src={cuentaLogo} alt="Estado-Cuenta" width="100" height="100" onClick={() => { }}/>
+              <p className="card-text">Ver Estado de Cuenta</p>
             </div>
           </div>
         </div>

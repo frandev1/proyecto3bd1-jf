@@ -15,6 +15,10 @@
     flex-direction: column; /* Arrange items vertically */
     justify-content: space-between; /* Space items evenly */
     align-items: center; /* Center items horizontally */
+
+
+    /* Add shadows to create a card effect */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .card-body img {
