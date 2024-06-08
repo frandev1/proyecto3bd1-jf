@@ -1,35 +1,51 @@
-.card-container {
-    display: flex;
+.header{
+    background-color: #242424;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.group-content{display: flex;
     flex-direction: row; /* Arrange items horizontally */
     justify-content: center; /* Center items horizontally */
-  }
+    flex-wrap: wrap; /* Wrap items to the next line */
+    gap: 20px; /* Add space between items */
 
-.card-body {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #7e7e7e;
-    border-radius: 5px;
-    width: 300px;
-    height: 300px;
-    display: flex;
-    flex-direction: column; /* Arrange items vertically */
-    justify-content: space-between; /* Space items evenly */
-    align-items: center; /* Center items horizontally */
-
-
-    /* Add shadows to create a card effect */
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #242424;
+    
 }
 
-.card-body img {
-    width: 300px;
-    height: 300px;
+.card {
+    background-color: #242424;
+
+    box-shadow: 0 4px 8px 0 rgb(0, 0, 0);
+
+    transition: 1.3s;
 }
 
-  
-.btn {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgb(0, 0, 0);
+
+    transform: scale(1.1);
+
     color: white;
 }
+
+.card-title {
+    color: white;
+    pointer-events: visible;
+}
+
+.card img {
+    width: 300px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #242424;
+    color: white;
+}
+
