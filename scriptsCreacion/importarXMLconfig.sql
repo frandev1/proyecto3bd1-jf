@@ -1,7 +1,7 @@
 DECLARE @XMLData XML;
 
 SELECT @XMLData = BulkColumn
-FROM OPENROWSET(BULK 'C:\Users\Llermy\Desktop\proyecto2Bases\config.xml', SINGLE_BLOB) AS x;
+FROM OPENROWSET(BULK 'C:\TEC\BasesDatos1\proyecto3bd1-jf\scriptsCreacion\config.xml', SINGLE_BLOB) AS x;
 
 --insertar tipos de tarifa
 DECLARE @TempTiposTarifa TABLE (

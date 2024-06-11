@@ -1,7 +1,7 @@
 DECLARE @XMLData XML;
 
 SELECT @XMLData = BulkColumn
-FROM OPENROWSET(BULK 'C:\Users\Llermy\Desktop\proyecto2Bases\operacionesMasivasCorregido.xml', SINGLE_BLOB) AS x;
+FROM OPENROWSET(BULK 'C:\TEC\BasesDatos1\proyecto3bd1-jf\scriptsCreacion\operacionesMasivasCorregido.xml', SINGLE_BLOB) AS x;
 
 --insertar todas las fechas en una tabla
 DECLARE @fechaOperacion TABLE (

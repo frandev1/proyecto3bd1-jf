@@ -8,9 +8,14 @@ import './App.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
+import Facturas from './Facturas.jsx'
+import { Link, Routes, Route, BrowserRouter } from 'react-router-dom'
+import { show_alerta } from './functions.jsx'
 
 function App() {
   const [title, setTitle] = useState('')
+  const [pagina, setPagina] = useState(true)
+  const [facturas, setFacturas] = useState()
 
   const openModal = (op, id, name) => {
     setTitle('')
@@ -26,8 +31,70 @@ function App() {
     }
   }
 
-  return (
-    <>
+  const goToFacturas = () => {
+    const numero = document.getElementById('inputNumero').value
+    if (numero === '') {
+      show_alerta('Debe ingresar el número de teléfono', 'error', 'inputNumero')
+      return
+    }
+    setPagina(false)
+    setFacturas(true)
+  }
+
+  const goToCuentas = () => {
+    setPagina(false)
+    setFacturas(false)
+  }
+
+  const renderFacturas = (numero) => {
+    return (
+      <div className='container-fluid'>
+          <div className='row'>
+              <div className='col-12'>
+                  <h2 className='text-center mt-3'>Facturas</h2>
+              </div>
+          </div>
+          <div className='row mt-3'>
+              <div className='col-12'>
+                  <div className='table-responsive'>
+                      <table className='table table-bordered'>
+                          <thead>
+                              <tr><th>NOMBRE</th><th>EDITAR</th><th>ELIMINAR</th><th>VER</th><th>HISTORIAL</th><th>MOVIMIENTOS</th></tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+    )
+  }
+
+  const renderCuentas = (empresa) => {
+    return (
+      <div className='container-fluid'>
+          <div className='row'>
+              <div className='col-12'>
+                  <h2 className='text-center mt-3'>Cuentas</h2>
+              </div>
+          </div>
+          <div className='row mt-3'>
+              <div className='col-12'>
+                  <div className='table-responsive'>
+                      <table className='table table-bordered'>
+                          <thead>
+                              <tr><th>NOMBRE</th><th>EDITAR</th><th>ELIMINAR</th><th>VER</th><th>HISTORIAL</th><th>MOVIMIENTOS</th></tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+    )
+  }
+
+  const renderInicio = () => {
+    return (
+      <div className='container-fluid'>
       <div className="header">
         <h1>Servicio Telefónico</h1>
         <h4>Factura y Estado de Cuenta</h4>
@@ -66,7 +133,8 @@ function App() {
             </div>
             <div className='modal-footer'>
               <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-              <button type='button' className='btn btn-primary'>Consultar</button>
+              <button type='button' className='btn btn-primary' data-bs-dismiss='modal'
+              onClick={() => {goToFacturas()}}>Consultar</button>
             </div>
           </div>
         </div>
@@ -89,11 +157,27 @@ function App() {
             </div>
             <div className='modal-footer'>
               <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-              <button type='button' className='btn btn-primary'>Consultar</button>
+              <button type='button' className='btn btn-primary' data-bs-dismiss='modal'
+              onClick={() => {goToCuentas()}}>Consultar</button>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    )
+  }
+
+  return (
+    <>
+      {pagina && (
+        renderInicio()
+      )}
+      {!pagina && facturas && (
+        renderFacturas()
+      )}
+      {!pagina && !facturas && (
+        renderCuentas()
+      )}
     </>
   )
 }

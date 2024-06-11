@@ -1,6 +1,5 @@
 .header{
-    background-color: #242424;
-    color: white;
+    color: black;
     text-align: center;
     padding: 10px;
 }
@@ -9,14 +8,11 @@
     flex-direction: row; /* Arrange items horizontally */
     justify-content: center; /* Center items horizontally */
     flex-wrap: wrap; /* Wrap items to the next line */
-    gap: 20px; /* Add space between items */
-
-    background-color: #242424;
+    gap: 20px; /* Add space between items */;
     
 }
 
 .card {
-    background-color: #242424;
 
     box-shadow: 0 4px 8px 0 rgb(0, 0, 0);
 
@@ -28,11 +24,11 @@
 
     transform: scale(1.1);
 
-    color: white;
+    color: black;
 }
 
 .card-title {
-    color: white;
+    color: black;
     pointer-events: visible;
 }
 
@@ -45,7 +41,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #242424;
-    color: white;
+    color: black;
 }
 
