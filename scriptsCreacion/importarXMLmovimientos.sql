@@ -15,8 +15,11 @@ SELECT
 FROM 
     @XMLData.nodes('/Operaciones/FechaOperacion') AS T(FechaOperacion);
 
-declare @lo INT = 1,@hi INT = 2
-declare @tempFecha DATE
+DECLARE @lo INT = 1,@hi INT;
+SELECT @hi = COUNT(ID) 
+FROM dbo.Cliente
+
+DECLARE @tempFecha DATE
 DECLARE @xpath NVARCHAR(100)
 
 --variables para clientes nuevos
@@ -106,7 +109,7 @@ WHILE (@lo<=@hi)
 		WHILE (@loInsCLi<=@hiInsCLi)
 		BEGIN
 			SELECT @tempIdentificacion = Identificacion, @tempNombre = Nombre FROM @ClientesNuevos WHERE  ID = @loInsCLi
-			--EXECUTE [dbo].[insertCliente] @tempIdentificacion,@tempNombre,'admin','12.3456.78',0;
+			EXECUTE [dbo].[insertCliente] @tempIdentificacion,@tempNombre,'admin','12.3456.78',0;
 
 			SET @loInsCLi = @loInsCLi+1
 		END
@@ -132,7 +135,7 @@ WHILE (@lo<=@hi)
 		WHILE (@loInsCont<=@hiInsCont)
 		BEGIN
 			SELECT @tempNumero = Numero, @tempDocIdCliente = DocIdCliente, @tempTipoTarifa = TipoTarifa FROM @ContratosNuevos WHERE  ID = @loInsCont
-			--EXECUTE [dbo].[insertContrato] @tempNumero,@tempDocIdCliente,@tempTipoTarifa,'admin','12.3456.78',0;
+			EXECUTE [dbo].[insertContrato] @tempNumero,@tempDocIdCliente,@tempTipoTarifa,@tempFecha,'admin','12.3456.78',0;
 
 			SET @loInsCont = @loInsCont+1
 		END
@@ -158,7 +161,7 @@ WHILE (@lo<=@hi)
 		WHILE (@loInsRelFam<=@hiInsRelFam)
 		BEGIN
 			SELECT @tempDocIdDe = DocIdDe, @tempDocIdA = DocIdA, @tempTipoRelacion = TipoRelacion FROM @RelacionFamiliar WHERE  ID = @loInsRelFam
-			--EXECUTE [dbo].[insertRelacionFamiliar] @tempDocIdDe,@tempDocIdA,@tempTipoRelacion,'admin','12.3456.78',0;
+			EXECUTE [dbo].[insertRelacionFamiliar] @tempDocIdDe,@tempDocIdA,@tempTipoRelacion,'admin','12.3456.78',0;
 
 			SET @loInsRelFam = @loInsRelFam+1
 		END
@@ -186,7 +189,7 @@ WHILE (@lo<=@hi)
 		WHILE (@loInsLlamTel<=@hiInsLlamTel)
 		BEGIN
 			SELECT @tempNumeroDe = NumeroDe, @tempNumeroA = NumeroA, @tempInicio = Inicio, @tempFinal = Final FROM @LlamadaTelefonica WHERE  ID = @loInsLlamTel
-			--EXECUTE [dbo].[insertLlamadaTelefonica] @tempNumeroDe,@tempNumeroA,@tempInicio,@tempFinal,'admin','12.3456.78',0;
+			EXECUTE [dbo].[insertLlamadaTelefonica] @tempNumeroDe,@tempNumeroA,@tempInicio,@tempFinal,'admin','12.3456.78',0;
 
 			SET @loInsLlamTel = @loInsLlamTel+1
 		END
@@ -234,7 +237,7 @@ WHILE (@lo<=@hi)
 		WHILE (@loInsUsoDatos<=@hiInsUsoDatos)
 		BEGIN
 			SELECT @tempNumeroUD = Numero, @tempQGigas = QGigas FROM @UsoDatos WHERE  ID = @loInsUsoDatos
-			--EXECUTE [dbo].[insertUsoDatos] @tempNumeroUD, @tempQGigas, @tempFecha,'admin','12.3456.78',0;
+			EXECUTE [dbo].[insertUsoDatos] @tempNumeroUD, @tempQGigas, @tempFecha,'admin','12.3456.78',0;
 
 			SET @loInsUsoDatos = @loInsUsoDatos+1
 		END
@@ -245,3 +248,11 @@ WHILE (@lo<=@hi)
 	END;
 
 --select * from Cliente 
+
+
+--SELECT * FROM Cliente
+--SELECT * FROM Contrato
+--SELECT * FROM RelacionFamiliar
+--SELECT * FROM LlamadaTelefonica
+--SELECT * FROM PagoFacturas
+--SELECT * FROM UsoDatos

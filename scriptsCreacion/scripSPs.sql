@@ -107,6 +107,7 @@ CREATE PROCEDURE insertContrato
     @inNumero BIGINT,
 	@inDocIdCliente INT,
 	@inTipoTarifa INT,
+	@fechaContrato DATE,
 	@inNamePostbyUser NVARCHAR(128),
 	@inPostInIP NVARCHAR(128),
 	@OutResult INT OUTPUT
@@ -170,9 +171,9 @@ BEGIN TRY
 			--incersion
 			INSERT 
 			INTO 
-				dbo.Contrato(Numero, DocIdCliente, TipoTarifa) 
+				dbo.Contrato(Numero, DocIdCliente, TipoTarifa, Fecha) 
 			VALUES 
-				(@inNumero, @IdCliente, @inTipoTarifa); 
+				(@inNumero, @IdCliente, @inTipoTarifa, @fechaContrato); 
 
 			print('contrato guardado')
 
@@ -203,7 +204,7 @@ SET NOCOUNT OFF;
 END;
 
 
---EXECUTE [dbo].[insertContrato] 8988839,5673413,2,'admin','12.3456.78',0;
+--EXECUTE [dbo].[insertContrato] 8988839,5673413,2,'2-5-2024','admin','12.3456.78',0;
 --select * from Contrato
 --select * from BitacoraEvento
 
@@ -551,3 +552,18 @@ END;
 --EXECUTE [dbo].[insertUsoDatos] 8988833, 10.5, '10-3-2024','admin','12.3456.78',0;
 --select * from UsoDatos
 --select * from Contrato
+
+/*
+print(convert(time,'1:00:1.1090'))
+
+
+SELECT 0.5*(DATEDIFF(SECOND, '1-1-1 1:00:1.1090', '1-1-1 1:01:2.1090')) AS TotalMinutes
+
+SELECT (DATEDIFF(MINUTE, '1-30-1 1:00:1.1090', '2-10-1 1:01:2.1090')) AS TotalMinutes
+
+
+declare @ds date;
+set @ds = '1-30-0001 1:00:1.1090'
+
+print(@ds)
+*/

@@ -1,5 +1,5 @@
-USE [servicioTelefonico]
-GO
+--USE [servicioTelefonico]
+--GO
 
 /****** Object:  Table [dbo].[Cliente]    Script Date: 22/5/2024 15:11:54 ******/
 SET ANSI_NULLS ON
@@ -20,6 +20,159 @@ CREATE TABLE [dbo].[Cliente](
 GO
 
 
+
+
+/****** Object:  Table [dbo].[LlamadaTelefonica]    Script Date: 22/5/2024 15:13:07 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[LlamadaTelefonica](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[NumeroDe] [bigint] NOT NULL,
+	[NumeroA] [bigint] NOT NULL,
+	[Inicio] [datetime] NOT NULL,
+	[Final] [datetime] NOT NULL,
+ CONSTRAINT [PK_LlamadaTelefonica] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+
+/****** Object:  Table [dbo].[NumerosEmpresaExtranjera]    Script Date: 6/6/2024 06:04:57 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[NumerosEmpresaExtranjera](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Numero] [int] NOT NULL,
+	[Empresa] [nvarchar](256) NOT NULL,
+ CONSTRAINT [PK_NumerosEmpresaExtranjera] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+/****** Object:  Table [dbo].[TipoRelacionFamiliar]    Script Date: 22/5/2024 15:13:27 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TipoRelacionFamiliar](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](128) NOT NULL,
+ CONSTRAINT [PK_TipoRelacionFamiliar] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[RelacionFamiliar]    Script Date: 22/5/2024 15:13:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RelacionFamiliar](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[DocIdDe] [int] NOT NULL,
+	[DocIdA] [int] NOT NULL,
+	[TipoRelacion] [int] NOT NULL,
+ CONSTRAINT [PK_RelacionFamiliar] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[RelacionFamiliar]  WITH CHECK ADD  CONSTRAINT [FK_RelacionFamiliar_TipoRelacionFamiliar] FOREIGN KEY([TipoRelacion])
+REFERENCES [dbo].[TipoRelacionFamiliar] ([ID])
+GO
+
+ALTER TABLE [dbo].[RelacionFamiliar] CHECK CONSTRAINT [FK_RelacionFamiliar_TipoRelacionFamiliar]
+GO
+
+
+
+
+
+/****** Object:  Table [dbo].[TiposElemento]    Script Date: 22/5/2024 15:13:39 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TiposElemento](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](128) NOT NULL,
+	[IdTipoUnidad] [int] NOT NULL,
+	[Valor] [int] NOT NULL,
+	[EsFijo] [int] NOT NULL
+ CONSTRAINT [PK_TiposElemento] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+
+/****** Object:  Table [dbo].[TiposTarifa]    Script Date: 22/5/2024 15:13:49 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TiposTarifa](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](128) NOT NULL,
+ CONSTRAINT [PK_TiposTarifa] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+/****** Object:  Table [dbo].[TipoUnidad]    Script Date: 22/5/2024 15:14:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TipoUnidad](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Tipo] [nvarchar](128) NOT NULL,
+ CONSTRAINT [PK_TipoUnidad] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
 /****** Object:  Table [dbo].[Contrato]    Script Date: 5/6/2024 08:03:29 ******/
 SET ANSI_NULLS ON
 GO
@@ -32,6 +185,7 @@ CREATE TABLE [dbo].[Contrato](
 	[Numero] [bigint] NOT NULL,
 	[DocIdCliente] [int] NOT NULL,
 	[TipoTarifa] [int] NOT NULL,
+	[Fecha] [date] NOT NULL,
  CONSTRAINT [PK_Contrato] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -189,158 +343,6 @@ GO
 
 
 
-/****** Object:  Table [dbo].[LlamadaTelefonica]    Script Date: 22/5/2024 15:13:07 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[LlamadaTelefonica](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[NumeroDe] [bigint] NOT NULL,
-	[NumeroA] [bigint] NOT NULL,
-	[Inicio] [datetime] NOT NULL,
-	[Final] [datetime] NOT NULL,
- CONSTRAINT [PK_LlamadaTelefonica] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-
-/****** Object:  Table [dbo].[NumerosEmpresaExtranjera]    Script Date: 6/6/2024 06:04:57 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[NumerosEmpresaExtranjera](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Numero] [int] NOT NULL,
-	[Empresa] [nvarchar](256) NOT NULL,
- CONSTRAINT [PK_NumerosEmpresaExtranjera] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-
-/****** Object:  Table [dbo].[RelacionFamiliar]    Script Date: 22/5/2024 15:13:18 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[RelacionFamiliar](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[DocIdDe] [int] NOT NULL,
-	[DocIdA] [int] NOT NULL,
-	[TipoRelacion] [int] NOT NULL,
- CONSTRAINT [PK_RelacionFamiliar] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[RelacionFamiliar]  WITH CHECK ADD  CONSTRAINT [FK_RelacionFamiliar_TipoRelacionFamiliar] FOREIGN KEY([TipoRelacion])
-REFERENCES [dbo].[TipoRelacionFamiliar] ([ID])
-GO
-
-ALTER TABLE [dbo].[RelacionFamiliar] CHECK CONSTRAINT [FK_RelacionFamiliar_TipoRelacionFamiliar]
-GO
-
-
-
-/****** Object:  Table [dbo].[TipoRelacionFamiliar]    Script Date: 22/5/2024 15:13:27 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[TipoRelacionFamiliar](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Nombre] [nvarchar](128) NOT NULL,
- CONSTRAINT [PK_TipoRelacionFamiliar] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-
-/****** Object:  Table [dbo].[TiposElemento]    Script Date: 22/5/2024 15:13:39 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[TiposElemento](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Nombre] [nvarchar](128) NOT NULL,
-	[IdTipoUnidad] [int] NOT NULL,
-	[Valor] [int] NOT NULL,
-	[EsFijo] [int] NOT NULL
- CONSTRAINT [PK_TiposElemento] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-
-/****** Object:  Table [dbo].[TiposTarifa]    Script Date: 22/5/2024 15:13:49 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[TiposTarifa](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Nombre] [nvarchar](128) NOT NULL,
- CONSTRAINT [PK_TiposTarifa] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-/****** Object:  Table [dbo].[TipoUnidad]    Script Date: 22/5/2024 15:14:00 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[TipoUnidad](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Tipo] [nvarchar](128) NOT NULL,
- CONSTRAINT [PK_TipoUnidad] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
 /****** Object:  Table [dbo].[UsoDatos]    Script Date: 22/5/2024 15:14:09 ******/
 SET ANSI_NULLS ON
 GO
@@ -359,6 +361,174 @@ CREATE TABLE [dbo].[UsoDatos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+
+--Facturas
+
+/****** Object:  Table [dbo].[EstadoFactura]    Script Date: 11/6/2024 05:05:02 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[EstadoFactura](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Tipo] [nvarchar](256) NOT NULL,
+ CONSTRAINT [PK_EstadoFactura] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[EstadoFactura]
+           ([Tipo])
+     VALUES
+           ('Pendiente')
+
+INSERT INTO [dbo].[EstadoFactura]
+           ([Tipo])
+     VALUES
+           ('Pagada')
+
+
+
+
+/****** Object:  Table [dbo].[Factura]    Script Date: 11/6/2024 05:04:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Factura](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[IdCliente] [int] NOT NULL,
+	[Fecha] [date] NOT NULL,
+	[SubtotalSinImpuestos] [int] NOT NULL,
+	[SubtotalConImpuestos] [int] NOT NULL,
+	[MultaPorFactPend] [int] NOT NULL,
+	[Total] [int] NOT NULL,
+	[FechaPagada] [date] NOT NULL,
+	[IdEstado] [int] NOT NULL,
+ CONSTRAINT [PK_Factura] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [FK_Factura_Cliente] FOREIGN KEY([IdCliente])
+REFERENCES [dbo].[Cliente] ([ID])
+GO
+
+ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [FK_Factura_Cliente]
+GO
+
+ALTER TABLE [dbo].[Factura]  WITH CHECK ADD  CONSTRAINT [FK_Factura_EstadoFactura] FOREIGN KEY([IdEstado])
+REFERENCES [dbo].[EstadoFactura] ([ID])
+GO
+
+ALTER TABLE [dbo].[Factura] CHECK CONSTRAINT [FK_Factura_EstadoFactura]
+GO
+
+
+
+/****** Object:  Table [dbo].[DetalleDeFactura]    Script Date: 11/6/2024 05:05:25 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DetalleDeFactura](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[IdFactura] [int] NOT NULL,
+	[TarifaBasica] [int] NOT NULL,
+	[QMinutosExtra] [int] NOT NULL,
+	[QGigasExtra] [float] NOT NULL,
+	[QMintosAFamiliares] [int] NOT NULL,
+	[CobroPor911] [int] NOT NULL,
+	[CobroPor900] [int] NOT NULL,
+	[CobroPor800] [int] NOT NULL,
+ CONSTRAINT [PK_DetalleDeFactura] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[DetalleDeFactura]  WITH CHECK ADD  CONSTRAINT [FK_DetalleDeFactura_Factura] FOREIGN KEY([IdFactura])
+REFERENCES [dbo].[Factura] ([ID])
+GO
+
+ALTER TABLE [dbo].[DetalleDeFactura] CHECK CONSTRAINT [FK_DetalleDeFactura_Factura]
+GO
+
+
+
+/****** Object:  Table [dbo].[DetalleLlamadas]    Script Date: 11/6/2024 05:05:46 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DetalleLlamadas](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[IdFactura] [int] NOT NULL,
+	[Fecha] [date] NOT NULL,
+	[HoraInicio] [time](7) NOT NULL,
+	[HoraFin] [time](7) NOT NULL,
+	[NumeroDeLlamada] [bigint] NOT NULL,
+	[QMinutos] [int] NOT NULL,
+	[EsUnaLlamadaEntreFamiliares] [int] NOT NULL,
+ CONSTRAINT [PK_DetalleLlamadas] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[DetalleLlamadas]  WITH CHECK ADD  CONSTRAINT [FK_DetalleLlamadas_Factura] FOREIGN KEY([IdFactura])
+REFERENCES [dbo].[Factura] ([ID])
+GO
+
+ALTER TABLE [dbo].[DetalleLlamadas] CHECK CONSTRAINT [FK_DetalleLlamadas_Factura]
+GO
+
+
+
+/****** Object:  Table [dbo].[DetalleUsoDatos]    Script Date: 11/6/2024 05:06:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DetalleUsoDatos](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[IdFactura] [int] NOT NULL,
+	[Fecha] [date] NOT NULL,
+	[QDatosConsmidos] [float] NOT NULL,
+ CONSTRAINT [PK_DetalleUsoDatos] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[DetalleUsoDatos]  WITH CHECK ADD  CONSTRAINT [FK_DetalleUsoDatos_Factura] FOREIGN KEY([IdFactura])
+REFERENCES [dbo].[Factura] ([ID])
+GO
+
+ALTER TABLE [dbo].[DetalleUsoDatos] CHECK CONSTRAINT [FK_DetalleUsoDatos_Factura]
+GO
+
+
+
+
 
 
 
@@ -424,30 +594,6 @@ VALUES ('Insertar uso de datos')
 
 
 
---drop table [DBError]
-/****** Object:  Table [dbo].[DBError]    Script Date: 14/4/2024 20:56:27 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[DBError](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[ErrorUserName] [nvarchar](50) NOT NULL,
-	[ErrorNumber] [int] NOT NULL,
-	[ErrorState] [nvarchar](50) NOT NULL,
-	[ErrorSeverity] [nvarchar](50) NOT NULL,
-	[ErrorLine] [int] NOT NULL,
-	[ErrorProcedure] [nvarchar](50) NOT NULL,
-	[ErrorMessage] [nvarchar](2000) NOT NULL,
-	[ErrorDateTime] [datetime] NOT NULL,
- CONSTRAINT [PK_DBError] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
 
 /****** Object:  Table [dbo].[Error]    Script Date: 14/4/2024 20:57:42 ******/
 SET ANSI_NULLS ON
