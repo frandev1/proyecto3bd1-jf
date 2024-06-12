@@ -1,7 +1,7 @@
 DECLARE @XMLData XML;
 
 SELECT @XMLData = BulkColumn
-FROM OPENROWSET(BULK 'C:\TEC\BasesDatos1\proyecto3bd1-jf\scriptsCreacion\operacionesMasivasCorregido.xml', SINGLE_BLOB) AS x;
+FROM OPENROWSET(BULK 'C:\Users\Llermy\Desktop\proyecto2Bases\operacionesMasivasCorregido.xml', SINGLE_BLOB) AS x;
 
 --insertar todas las fechas en una tabla
 DECLARE @fechaOperacion TABLE (
@@ -17,7 +17,7 @@ FROM
 
 DECLARE @lo INT = 1,@hi INT;
 SELECT @hi = COUNT(ID) 
-FROM dbo.Cliente
+FROM @fechaOperacion
 
 DECLARE @tempFecha DATE
 DECLARE @xpath NVARCHAR(100)
@@ -84,7 +84,13 @@ DECLARE @loInsUsoDatos INT = 1,@hiInsUsoDatos INT = 0
 DECLARE @tempNumeroUD BIGINT, @tempQGigas FLOAT
 
 
- 
+--variables para crear facturas
+DECLARE @ClientesPorFacturar TABLE (
+			[ID] [int] IDENTITY(1,1) NOT NULL,
+			Identificacion INT
+);
+DECLARE @loCrearFactura INT = 1,@hiCrearFactura INT = 0
+DECLARE @tempIdentCrearFact INT;
 
 WHILE (@lo<=@hi)
 	BEGIN
@@ -108,6 +114,7 @@ WHILE (@lo<=@hi)
 
 		WHILE (@loInsCLi<=@hiInsCLi)
 		BEGIN
+			print('inserta cliente')
 			SELECT @tempIdentificacion = Identificacion, @tempNombre = Nombre FROM @ClientesNuevos WHERE  ID = @loInsCLi
 			EXECUTE [dbo].[insertCliente] @tempIdentificacion,@tempNombre,'admin','12.3456.78',0;
 
@@ -240,6 +247,28 @@ WHILE (@lo<=@hi)
 			EXECUTE [dbo].[insertUsoDatos] @tempNumeroUD, @tempQGigas, @tempFecha,'admin','12.3456.78',0;
 
 			SET @loInsUsoDatos = @loInsUsoDatos+1
+		END
+
+
+		--crear las facturas para los clientes en esta fecha
+		INSERT INTO @ClientesPorFacturar(
+			Identificacion
+			)
+		SELECT 
+			Identificacion
+		FROM 
+			dbo.Cliente
+		
+		--select * from @ClientesPorFacturar
+
+		SELECT @hiCrearFactura = COUNT(Identificacion) FROM @ClientesPorFacturar
+
+		WHILE (@loCrearFactura<=@hiCrearFactura)
+		BEGIN
+			SELECT @tempIdentCrearFact = Identificacion FROM @ClientesPorFacturar WHERE  ID = @loCrearFactura
+			EXECUTE [dbo].[facturarCliente] @tempIdentCrearFact, @tempFecha,'admin','12.3456.78',0;
+
+			SET @loCrearFactura = @loCrearFactura+1
 		END
 
 

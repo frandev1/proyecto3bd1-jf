@@ -1,5 +1,5 @@
-USE [servicioTelefonico]
-GO
+--USE [servicioTelefonico]
+--GO
 
 /****** Object:  Table [dbo].[Cliente]    Script Date: 22/5/2024 15:11:54 ******/
 SET ANSI_NULLS ON
