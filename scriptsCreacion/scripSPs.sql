@@ -553,6 +553,90 @@ END;
 --select * from UsoDatos
 --select * from Contrato
 
+
+
+
+
+---consultar facturas
+CREATE PROCEDURE consultarFacturaPorCliente
+    @inIdentificacion INT,
+	@inNamePostbyUser NVARCHAR(128),
+	@inPostInIP NVARCHAR(128),
+	@OutResult INT OUTPUT
+AS
+BEGIN
+	
+SET NOCOUNT ON;
+
+BEGIN TRY
+	DECLARE @Descripcion NVARCHAR(256);
+	DECLARE @IdUser INT;
+
+	SET @OutResult = 0;
+
+	SELECT @IdUser = Id 
+	FROM dbo.Usuario 
+	WHERE UserName = @inNamePostbyUser;
+
+	DECLARE @IdCliente INT;
+
+	IF NOT EXISTS (SELECT 1 FROM dbo.Cliente WHERE Identificacion = @inIdentificacion)
+	BEGIN
+		SET @OutResult = 50010;
+
+		SELECT @Descripcion = Descripcion 
+		FROM dbo.Error 
+		WHERE Codigo = @OutResult;
+
+		SET @Descripcion = 'No existe el cliente, ' + 
+							CONVERT(NVARCHAR(50), @inIdentificacion);
+
+		PRINT 'No existe el cliente.';
+	END;
+
+	ELSE
+	BEGIN
+		BEGIN TRANSACTION
+
+			SELECT @IdCliente = ID
+			FROM dbo.Cliente 
+			WHERE Identificacion = @inIdentificacion
+
+			--incersion
+			SELECT Fecha,
+				SubtotalConImpuestos,
+				SubtotalSinImpuestos,
+				MultaPorFactPend,
+				Total,
+				FechaPagada,
+				IdEstado
+			FROM Factura
+			WHERE IdCliente = 1
+			
+		COMMIT TRANSACTION 
+	END;
+
+	--trazabilidad
+	INSERT INTO dbo.BitacoraEvento (idTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+	VALUES (5, @Descripcion , @IdUser, @inPostInIP, GETDATE());
+
+END TRY
+
+BEGIN CATCH
+
+	IF @@TRANCOUNT>0 
+	BEGIN
+		ROLLBACK TRANSACTION;
+	END;
+	
+	SET @OutResult = 50100;   -- error en BD
+
+END CATCH
+SET NOCOUNT OFF;
+END;
+
+
+
 /*
 print(convert(time,'1:00:1.1090'))
 

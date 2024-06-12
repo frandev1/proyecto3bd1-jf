@@ -322,7 +322,7 @@ BEGIN TRY
 										@TotalGigasExtra+
 										@TotalMinutos900+
 										@TotalMinutos800;
-					/*
+					
 					IF EXISTS(SELECT 1 FROM dbo.Factura WHERE IdCliente = @IdCliente AND IdEstado = 1)
 					BEGIN
 						SELECT @MultaPorAtraso = Valor
@@ -333,7 +333,7 @@ BEGIN TRY
 					BEGIN
 						SET @MultaPorAtraso = 0;
 					END
-					*/
+					
 
 
 					--print('actualiza el encabezado')
@@ -341,7 +341,7 @@ BEGIN TRY
 					UPDATE [dbo].[Factura]
 						SET [SubtotalSinImpuestos] = @TotalSinImp
 							,[SubtotalConImpuestos] = @TotalSinImp * 1.13
-							,[MultaPorFactPend] = 0
+							,[MultaPorFactPend] = @MultaPorAtraso
 							,[Total] = @TotalSinImp * 1.13 + @MultaPorAtraso
 						WHERE ID = @IdfacturaActual
 
@@ -379,10 +379,94 @@ SET NOCOUNT OFF;
 END;
 
 
+---Pagar factura
+ALTER PROCEDURE pagarFactura
+    @inIdentificacion INT,
+	@inFechaActual DATE,
+	@inNamePostbyUser NVARCHAR(128),
+	@inPostInIP NVARCHAR(128),
+	@OutResult INT OUTPUT
+AS
+BEGIN
+	
+SET NOCOUNT ON;
+
+BEGIN TRY
+	DECLARE @Descripcion NVARCHAR(256);
+	DECLARE @IdUser INT;
+
+	SET @OutResult = 0;
+
+	SELECT @IdUser = Id 
+	FROM dbo.Usuario 
+	WHERE UserName = @inNamePostbyUser;
+
+	DECLARE @IdCliente INT;
+	DECLARE @IdFactura INT;
+
+	IF NOT EXISTS (SELECT 1 FROM dbo.Cliente WHERE Identificacion = @inIdentificacion)
+	BEGIN
+		SET @OutResult = 50010;
+
+		SET @Descripcion = 'El cliente no se encentra en la base, '
+
+		SET @Descripcion = @Descripcion +  ', ' + 
+							CONVERT(NVARCHAR(50), @inIdentificacion)
+
+		PRINT 'El cliente no existe.';
+	END;
+
+	ELSE
+	BEGIN
+		BEGIN TRANSACTION
+			
+			SELECT @IdCliente = ID
+			FROM dbo.Cliente 
+			WHERE Identificacion = @inIdentificacion
+
+			SELECT TOP 1 @IdFactura = ID
+			FROM dbo.Factura
+			WHERE IdCliente = @IdCliente AND NOT(IdEstado = 2)
+			ORDER BY Fecha ASC
+			
+			--update
+			UPDATE [dbo].[Factura]
+						SET [FechaPagada] = @inFechaActual
+						,[IdEstado] = 2
+						WHERE ID = @IdFactura
+
+			SET @Descripcion = CONVERT(NVARCHAR(50), @inIdentificacion) + ', ' + 
+							CONVERT(NVARCHAR(50), @IdFactura)+ ', ' + 
+							CONVERT(NVARCHAR(50), @inFechaActual);
+			
+		COMMIT TRANSACTION 
+	END;
+
+	--trazabilidad
+	INSERT INTO dbo.BitacoraEvento (idTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+	VALUES (5, @Descripcion , @IdUser, @inPostInIP, GETDATE());
+
+END TRY
+
+BEGIN CATCH
+
+	IF @@TRANCOUNT>0 
+	BEGIN
+		ROLLBACK TRANSACTION;
+	END;
+	
+	SET @OutResult = 50100;   -- error en BD
+
+END CATCH
+SET NOCOUNT OFF;
+END;
+
 
 -- TODO: Set parameter values here.
 
 EXECUTE [dbo].[facturarCliente] 4997881,'2024-4-1','dd','1',0;
+
+EXECUTE [dbo].[pagarFactura] 4997881,'2024-4-1','dd','1',0;
 
 select * from Cliente
 select * from Factura
