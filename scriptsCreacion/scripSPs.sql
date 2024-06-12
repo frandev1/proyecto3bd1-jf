@@ -559,7 +559,7 @@ END;
 
 ---consultar facturas
 CREATE PROCEDURE consultarFacturaPorCliente
-    @inIdentificacion INT,
+    @inNumero INT,
 	@inNamePostbyUser NVARCHAR(128),
 	@inPostInIP NVARCHAR(128),
 	@OutResult INT OUTPUT
@@ -578,9 +578,7 @@ BEGIN TRY
 	FROM dbo.Usuario 
 	WHERE UserName = @inNamePostbyUser;
 
-	DECLARE @IdCliente INT;
-
-	IF NOT EXISTS (SELECT 1 FROM dbo.Cliente WHERE Identificacion = @inIdentificacion)
+	IF NOT EXISTS (SELECT 1 FROM dbo.Contrato WHERE Numero = @inNumero)
 	BEGIN
 		SET @OutResult = 50010;
 
@@ -589,7 +587,7 @@ BEGIN TRY
 		WHERE Codigo = @OutResult;
 
 		SET @Descripcion = 'No existe el cliente, ' + 
-							CONVERT(NVARCHAR(50), @inIdentificacion);
+							CONVERT(NVARCHAR(50), @inNumero);
 
 		PRINT 'No existe el cliente.';
 	END;
@@ -598,20 +596,17 @@ BEGIN TRY
 	BEGIN
 		BEGIN TRANSACTION
 
-			SELECT @IdCliente = ID
-			FROM dbo.Cliente 
-			WHERE Identificacion = @inIdentificacion
-
 			--incersion
-			SELECT Fecha,
-				SubtotalConImpuestos,
-				SubtotalSinImpuestos,
-				MultaPorFactPend,
-				Total,
-				FechaPagada,
-				IdEstado
-			FROM Factura
-			WHERE IdCliente = 1
+			SELECT F.Fecha,
+				F.SubtotalConImpuestos,
+				F.SubtotalSinImpuestos,
+				F.MultaPorFactPend,
+				F.Total,
+				F.FechaPagada,
+				F.IdEstado
+			FROM Factura F
+				inner join Contrato C ON F.IdCliente = C.DocIdCliente
+			WHERE C.Numero = @inNumero
 			
 		COMMIT TRANSACTION 
 	END;
